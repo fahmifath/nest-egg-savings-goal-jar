@@ -176,6 +176,7 @@ export function init():void{
   depositModal.addEventListener("click",e=>{if(e.target===depositModal)closeDepositModal();});
   depositModal.addEventListener("keydown",handleModalKeydown);
   byId("close-deposit-modal")?.addEventListener("click",closeDepositModal);
+  byId("cancel-deposit")?.addEventListener("click",closeDepositModal);
   byId("empty-cta-btn")?.addEventListener("click",()=>{
     const f=byId("add-name");f?.scrollIntoView({behavior:"smooth"});f?.focus();
   });
