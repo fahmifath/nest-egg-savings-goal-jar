@@ -11,9 +11,9 @@ function el<K extends keyof HTMLElementTagNameMap>(tag:K,cls?:string,txt?:string
   if(attrs)for(const k in attrs)n.setAttribute(k,attrs[k]);
   return n;
 }
-function sEl(tag:string,attrs:Record<string,string>):SVGElement{
-  const n=document.createElementNS("http://www.w3.org/2000/svg",tag);
-  for(const k in attrs)n.setAttribute(k,attrs[k]);
+function sEl(t:string,a:Record<string,string|number>):SVGElement{
+  const n=document.createElementNS("http://www.w3.org/2000/svg",t);
+  for(const k in a)n.setAttribute(k,String(a[k]));
   return n;
 }
 function clearFieldError(id:string):void{
@@ -24,19 +24,18 @@ function showFieldError(id:string,msg:string):void{
   const e=byId(`${id}-error`),f=byId<HTMLInputElement>(id);
   if(e)e.textContent=msg;if(f){f.setAttribute("aria-invalid","true");f.focus();}
 }
-function createJarSvg(percent:number,status:JarStatus):SVGElement{
-  const svg=sEl("svg",{viewBox:"0 0 80 100","aria-hidden":"true",class:`jar-svg jar-svg--${status}`});
-  const clipId=`c-${Math.random().toString(36).slice(2,8)}`;
-  const defs=sEl("defs",{}),cp=sEl("clipPath",{id:clipId});
-  cp.appendChild(sEl("rect",{x:"10",y:"31",width:"60",height:"61",rx:"2"}));defs.appendChild(cp);
-  const fh=(61*percent)/100,fy=92-fh;
+function createJarSvg(pct:number,st:JarStatus):SVGElement{
+  const svg=sEl("svg",{viewBox:"0 0 80 100","aria-hidden":"true",class:`jar-svg jar-svg--${st}`});
+  const id=`c-${Math.random().toString(36).slice(2,8)}`;
+  const cp=sEl("clipPath",{id});cp.appendChild(sEl("rect",{x:10,y:31,width:60,height:61,rx:2}));
+  const h=(61*pct)/100;
   svg.append(
-    defs,
-    sEl("rect",{class:"jar-liquid",x:"10",y:String(fy),width:"60",height:String(fh),"clip-path":`url(#${clipId})`}),
-    sEl("rect",{class:"jar-shine",x:"16",y:"32",width:"8",height:"50",rx:"4","clip-path":`url(#${clipId})`}),
-    sEl("path",{class:"jar-body",d:"M15 25 Q10 25 10 32 L10 85 Q10 92 20 92 L60 92 Q70 92 70 85 L70 32 Q70 25 65 25 Z"}),
-    sEl("rect",{class:"jar-mouth",x:"18",y:"25",width:"44",height:"6"}),
-    sEl("rect",{class:"jar-lid",x:"12",y:"18",width:"56",height:"10",rx:"4"})
+    cp,
+    sEl("rect",{class:"jar-liquid",x:10,y:92-h,width:60,height:h,"clip-path":`url(#${id})`}),
+    sEl("rect",{class:"jar-shine",x:16,y:32,width:8,height:50,rx:4,"clip-path":`url(#${id})`}),
+    sEl("path",{class:"jar-body",d:"M15 25Q10 25 10 32v53q0 7 10 7h40q10 0 10-7V32q0-7-5-7Z"}),
+    sEl("rect",{class:"jar-mouth",x:18,y:25,width:44,height:6}),
+    sEl("rect",{class:"jar-lid",x:12,y:18,width:56,height:10,rx:4})
   );
   return svg;
 }
