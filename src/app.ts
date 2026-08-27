@@ -1,4 +1,4 @@
-import {type Jar,type JarStatus,STATUS_LABELS,validateJarInput,validateDepositInput,createJar,createDeposit,getJarStatus,getProgressPercent,formatCurrency,formatDate} from "./domain";
+import {type Jar,type JarStatus,STATUS_LABELS,validateJarInput,validateDepositInput,createJar,createDeposit,getJarStatus,getProgressPercent,formatCurrency,formatDepositMeta} from "./domain";
 import {load,save} from "./storage";
 let jars:Jar[]=[],deleteArmedId:string|null=null,deleteArmedTimer:ReturnType<typeof setTimeout>|null=null,depositTargetId:string|null=null;
 let liveRegion:HTMLElement,storageBanner:HTMLElement,jarGrid:HTMLElement,emptyCollection:HTMLElement,addJarForm:HTMLFormElement,depositModal:HTMLElement,depositForm:HTMLFormElement,depositModalTitle:HTMLElement;
@@ -45,7 +45,7 @@ function createDepositHistoryEl(jar:Jar):HTMLElement{
   const list=el("ul","deposit-history__list",undefined,{"aria-label":"Recent deposits"});
   for(const dep of last5){
     const item=el("li","deposit-history__item");
-    const meta=el("span","deposit-history__meta",formatDate(dep.date)+(dep.note?` — ${dep.note}`:""));
+    const meta=el("span","deposit-history__meta",formatDepositMeta(dep));
     item.append(el("span","deposit-history__amount",formatCurrency(dep.amount)),meta);
     list.appendChild(item);
   }

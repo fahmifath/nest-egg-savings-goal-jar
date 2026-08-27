@@ -48,3 +48,6 @@ export function formatDate(iso:string):string{
   if(!iso)return"—";
   const d=new Date(iso);return isNaN(d.getTime())?"—":new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",year:"numeric"}).format(d);
 }
+export function formatDepositMeta(dep:Deposit):string{
+  return dep.note?`${formatDate(dep.date)} — ${dep.note}`:formatDate(dep.date);
+}
